@@ -1,11 +1,26 @@
 #include <iostream>
 #include <vector>
-
+#include <bits/stdc++.h>
+using namespace std;
 using std::vector;
 
 vector<int> optimal_summands(int n) {
   vector<int> summands;
+  vector<bool> flag(n, false);
   //write your code here
+  int i=0;
+  while(i <= n){
+    i++;
+    //cout<<n<<" ";
+    if(flag[n-i] == true || n-i == i){
+        summands.push_back(n);
+        break;
+    } else{
+        n -= i;
+        summands.push_back(i);
+        flag[i]= true;
+    }
+  }
   return summands;
 }
 
