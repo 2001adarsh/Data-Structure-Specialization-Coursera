@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
-
+using namespace std;
 using std::vector;
 using std::swap;
 
@@ -12,12 +12,31 @@ int partition2(vector<int> &a, int l, int r) {
     if (a[i] <= x) {
       j++;
       swap(a[i], a[j]);
+    } else if(a[i] == x){
+        j++;
     }
   }
   swap(a[l], a[j]);
   return j;
 }
-
+void partition3(vector<int>&a, int l, int r, int& i, int&j) {
+    int x = a[l];
+    i = l, j = l;
+    for(int k=l+1; k<=r; k++) {
+        if(a[k] == x){
+            j++;
+            swap(a[j], a[k]);
+        }
+        if(a[k] < x){
+            i++;   j++;
+            swap(a[i], a[k]);
+            if(a[k] == x){
+                swap(a[j], a[k]);
+            }
+        }
+    }
+    swap(a[i], a[l]);
+}
 void randomized_quick_sort(vector<int> &a, int l, int r) {
   if (l >= r) {
     return;
@@ -25,10 +44,12 @@ void randomized_quick_sort(vector<int> &a, int l, int r) {
 
   int k = l + rand() % (r - l + 1);
   swap(a[l], a[k]);
-  int m = partition2(a, l, r);
+  //int m = partition2(a, l, r);
+    int i,j;
+    partition3(a,l,r, i,j);
 
-  randomized_quick_sort(a, l, m - 1);
-  randomized_quick_sort(a, m + 1, r);
+  randomized_quick_sort(a, l, i);
+  randomized_quick_sort(a, j+1, r);
 }
 
 int main() {

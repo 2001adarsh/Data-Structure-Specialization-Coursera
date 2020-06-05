@@ -1,11 +1,42 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
 
-using std::vector;
-
-vector<int> fast_count_segments(vector<int> starts, vector<int> ends, vector<int> points) {
-  vector<int> cnt(points.size());
+vector<ll> fast_count_segments(vector<ll> starts, vector<ll> ends, vector<ll> points) {
+  vector<ll> cnt(points.size());
   //write your code here
+  map<ll, ll> mp;
+  for(ll i=0; i<starts.size(); i++){
+    mp[starts[i]] += 1;
+    mp[ends[i]+1] += -1;
+  }
+
+  vector<ll> pre(mp.size(),0);
+
+  map<ll,ll>::iterator ip = mp.begin();
+  map<ll,ll>::iterator it=mp.begin();
+  ++it;
+  for( ; it!=mp.end(); ++it, ++ip){
+
+        it->second += ip->second;
+  }
+/*
+  for(map<ll,ll>::iterator it=mp.begin(); it!=mp.end(); ++it)
+  {
+      cout<<it->first<<" "<<it->second<<endl;
+  }
+*/
+
+  for(ll i=0; i<points.size(); i++){
+    map<ll,ll>::iterator it = mp.upper_bound(points[i]);
+    if(it!=mp.end()){
+     --it;
+    cnt[i] = it->second;
+    }
+    else
+        cnt[i] = 0;
+  }
+
   return cnt;
 }
 
@@ -20,19 +51,30 @@ vector<int> naive_count_segments(vector<int> starts, vector<int> ends, vector<in
 }
 
 int main() {
-  int n, m;
+  ll n, m;
   std::cin >> n >> m;
-  vector<int> starts(n), ends(n);
-  for (size_t i = 0; i < starts.size(); i++) {
-    std::cin >> starts[i] >> ends[i];
+    vector<ll> starts(n) ,ends(n);
+  for (ll i = 0; i < n; i++) {
+    cin >> starts[i] >> ends[i];
   }
-  vector<int> points(m);
-  for (size_t i = 0; i < points.size(); i++) {
+
+  vector<ll> points(m);
+  for (ll i = 0; i < points.size(); i++) {
     std::cin >> points[i];
   }
   //use fast_count_segments
-  vector<int> cnt = naive_count_segments(starts, ends, points);
-  for (size_t i = 0; i < cnt.size(); i++) {
+  vector<ll> cnt = fast_count_segments(starts, ends , points);
+  for (ll i = 0; i < cnt.size(); i++) {
     std::cout << cnt[i] << ' ';
   }
 }
+
+/*input:
+5 3
+0 3
+1 4
+4 7
+5 6
+9 10
+2 3 4
+*/
