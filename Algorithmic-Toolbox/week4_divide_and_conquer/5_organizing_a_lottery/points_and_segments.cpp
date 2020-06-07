@@ -10,7 +10,7 @@ vector<ll> fast_count_segments(vector<ll> starts, vector<ll> ends, vector<ll> po
     mp[starts[i]] += 1;
     mp[ends[i]+1] += -1;
   }
-
+  sort(points.begin(), points.end());
   vector<ll> pre(mp.size(),0);
 
   map<ll,ll>::iterator ip = mp.begin();
@@ -36,7 +36,6 @@ vector<ll> fast_count_segments(vector<ll> starts, vector<ll> ends, vector<ll> po
     else
         cnt[i] = 0;
   }
-
   return cnt;
 }
 
