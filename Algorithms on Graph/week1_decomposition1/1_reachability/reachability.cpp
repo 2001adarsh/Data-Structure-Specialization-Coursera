@@ -1,26 +1,50 @@
-#include <iostream>
-#include <vector>
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define endl 	"\n"
 
-using std::vector;
-using std::pair;
+class Graph
+{
+	map<ll , list<ll> > l;	//adj list
+public:
+	map<ll, bool> visited; //visited
 
+	void addEdge(ll x, ll y) {
+		l[x].push_back(y);
+		l[y].push_back(x);
+	}
 
-int reach(vector<vector<int> > &adj, int x, int y) {
-  //write your code here
-  return 0;
-}
+	void dfs(ll node) {
+		visited[node] = true;
+		for (auto nbr : l[node]) {
+			if (!visited[nbr]) {
+				dfs(nbr);
+			}
+		}
+	}
+};
 
-int main() {
-  size_t n, m;
-  std::cin >> n >> m;
-  vector<vector<int> > adj(n, vector<int>());
-  for (size_t i = 0; i < m; i++) {
-    int x, y;
-    std::cin >> x >> y;
-    adj[x - 1].push_back(y - 1);
-    adj[y - 1].push_back(x - 1);
-  }
-  int x, y;
-  std::cin >> x >> y;
-  std::cout << reach(adj, x - 1, y - 1);
+int main()
+{	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
+	ll n, m;
+	cin >> n >> m;
+	Graph g;
+
+	for (ll i = 0; i < m; i++) {
+		ll x, y;
+		cin >> x >> y;
+		g.addEdge(x, y);
+	}
+	ll x, y;
+	cin >> x >> y;
+
+	g.dfs(x);
+
+	if (g.visited[y] == true)
+		cout << 1;
+	else cout << 0;
+
+	return 0;
 }

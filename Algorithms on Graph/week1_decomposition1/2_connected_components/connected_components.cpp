@@ -1,24 +1,52 @@
-#include <iostream>
-#include <vector>
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define endl  "\n"
 
-using std::vector;
-using std::pair;
+class Graph
+{
+  map<ll , list<ll> > l;  //adj list
+public:
+  map<ll, bool> visited; //visited
 
-int number_of_components(vector<vector<int> > &adj) {
-  int res = 0;
-  //write your code here
-  return res;
-}
-
-int main() {
-  size_t n, m;
-  std::cin >> n >> m;
-  vector<vector<int> > adj(n, vector<int>());
-  for (size_t i = 0; i < m; i++) {
-    int x, y;
-    std::cin >> x >> y;
-    adj[x - 1].push_back(y - 1);
-    adj[y - 1].push_back(x - 1);
+  void addEdge(ll x, ll y) {
+    l[x].push_back(y);
+    l[y].push_back(x);
   }
-  std::cout << number_of_components(adj);
+
+  void dfs(ll node) {
+    visited[node] = true;
+    for (auto nbr : l[node]) {
+      if (!visited[nbr]) {
+        dfs(nbr);
+      }
+    }
+  }
+};
+
+int main()
+{ ios_base::sync_with_stdio(false);
+  cin.tie(NULL);
+
+
+
+  ll n, m;
+  cin >> n >> m;
+  Graph g;
+
+  for (ll i = 0; i < m; i++) {
+    ll x, y;
+    cin >> x >> y;
+    g.addEdge(x, y);
+  }
+  ll cnt = 0;
+  for (ll i = 1; i <= n; i++) {
+    if (!g.visited[i]) {
+      cnt++;
+      g.dfs(i);
+    }
+  }
+  cout << cnt;
+
+  return 0;
 }
