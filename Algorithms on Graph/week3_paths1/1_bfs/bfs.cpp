@@ -1,27 +1,46 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define endl 	"\n"
 
-using std::vector;
-using std::queue;
+const int N = 100005;
+vector<ll> v[N];
 
-int distance(vector<vector<int> > &adj, int s, int t) {
-  //write your code here
-  return -1;
+ll bfs(ll src, ll dest, ll n) {
+	ll dis[N + 1] = {0};
+	for (ll i = 1; i <= n; i++) {
+		dis[i] = INT_MAX;
+	}
+	queue<ll> q;
+	q.push(src);
+	dis[src] = 0;
+
+	while (!q.empty()) {
+		ll node = q.front();
+		q.pop();
+		for (auto nbr : v[node]) {
+			if (dis[nbr] == INT_MAX) {
+				dis[nbr] = dis[node] + 1;
+				q.push(nbr);
+			}
+		}
+	}
+	return (dis[dest] != INT_MAX) ? dis[dest] : -1;
 }
 
-int main() {
-  int n, m;
-  std::cin >> n >> m;
-  vector<vector<int> > adj(n, vector<int>());
-  for (int i = 0; i < m; i++) {
-    int x, y;
-    std::cin >> x >> y;
-    adj[x - 1].push_back(y - 1);
-    adj[y - 1].push_back(x - 1);
-  }
-  int s, t;
-  std::cin >> s >> t;
-  s--, t--;
-  std::cout << distance(adj, s, t);
+int main()
+{	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
+	ll n, m;
+	ll x, y;
+	cin >> n >> m;
+	for (ll i = 0; i < m; i++) {
+		cin >> x >> y;
+		v[x].push_back(y);
+		v[y].push_back(x);
+	}
+	cin >> x >> y;
+	cout << bfs(x, y, n);
+	return 0;
 }
